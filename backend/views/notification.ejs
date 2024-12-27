@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Notifications</h1>
+    </header>
+
+    <main>
+        <ul>
+            <% notifications.forEach(notification => { %>
+                <li>
+                    <p><%= notification.message %></p>
+                    <p>Status: <%= notification.status %></p>
+                    <% if (notification.status === 'Pending') { %>
+                        <form method="POST" action="/notifications/<%= notification._id %>/accept">
+                            <button type="submit">Accept</button>
+                        </form>
+                        <form method="POST" action="/notifications/<%= notification._id %>/reject">
+                            <button type="submit">Reject</button>
+                        </form>
+                    <% } %>
+                </li>
+            <% }) %>
+        </ul>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 KaryaSetu. All rights reserved.</p>
+    </footer>
+</body>
+</html>

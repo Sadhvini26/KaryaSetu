@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/helper.css">
+    <title>Notifications</title>
+    <style>
+      body {
+          background-color: #f4f4f9;
+          margin: 0;
+          padding: 0;
+          font-family: Arial, sans-serif;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          min-height: 100vh;
+      }
+
+      h1 {
+          font-size: 24px;
+          color: #6b5b95;
+          margin: 20px 0;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: white;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        width: 100%;
+      }
+
+      header .logo img {
+        height: 50px;
+        width: 200px;
+      }
+
+      header nav ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+
+      header nav ul li a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      header .login-btn {
+        padding: 10px 20px;
+        background-color: #6a5acd;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      header .login-btn:hover {
+        background-color: #a496fa;
+      }
+
+      .notification-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          width: 90%;
+          max-width: 600px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+
+      .notification-list li {
+          background-color: #fff;
+          border-radius: 8px;
+          margin: 10px 0;
+          padding: 15px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          display: flex;
+          justify-content: space-between;
+          gap: 5px;
+          align-items: center;
+          transition: all 0.2s ease;
+          cursor: pointer;
+          width: 100%;
+      }
+
+      .notification-list li:hover {
+          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+          transform: translateY(-5px);
+      }
+
+      .notification-list li span {
+          font-size: 12px;
+          color: #888;
+          font-weight: bold;
+      }
+
+      .notification-list li span.unread {
+          color: #d9534f;
+      }
+
+      .notification-list li span.read {
+          color: #5bc0de;
+      }
+
+      p {
+          font-size: 16px;
+          color: #333;
+      }
+
+      .no-notifications {
+          font-size: 16px;
+          color: #888;
+          text-align: center;
+          margin-top: 20px;
+      }
+
+      .notification-buttons {
+          display: flex;
+          gap: 10px;
+      }
+
+      .accept-btn, .reject-btn {
+          background-color: #28a745;
+          color: white;
+          border: none;
+          border-radius: 50%;
+          padding: 10px;
+          cursor: pointer;
+          font-size: 16px;
+          transition: background-color 0.3s;
+      }
+
+      .accept-btn:hover {
+          background-color: #218838;
+      }
+
+      .reject-btn {
+          background-color: #dc3545;
+      }
+
+      .reject-btn:hover {
+          background-color: #c82333;
+      }
+
+      .status-message {
+          font-size: 16px;
+          color: #333;
+          margin-top: 10px;
+      }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+          <img src="/logo.png" alt="KaryaSetu Logo">
+          
+        </div>
+        <h3 style="color: rgb(83, 83, 83);">WELCOME <%= username.toUpperCase() %></h3>
+        <nav>
+           
+          <ul>
+           
+            <li><a href="#contact">Contact</a></li>
+            <button class="login-btn" id="back">BACK</button>
+          </ul>
+        </nav>
+    </header>
+    <h1>Notifications</h1>
+    
+    <% if (notifications.length > 0) { %>
+        <ul class="notification-list">
+            <% notifications.forEach(notification => { %>
+                <li data-id="<%= notification._id %>" class="<%= notification.isRead ? 'read' : 'unread' %>">
+                    <p><%= notification.message %> <span class="<%= notification.isRead ? 'read' : 'unread' %>">
+                        <p>Status: <%= notification.status %></p>
+                    <div class="notification-buttons">
+                        <% if (notification.status === 'Pending') { %>
+                        <form method="POST" action="/notifications/<%= notification._id %>/accept">
+                            <button class="accept-btn" type="submit">✔</button>
+                        </form>
+                            <form method="POST" action="/notifications/<%= notification._id %>/reject">
+                                <button class="reject-btn" type="submit">✖</button>
+                            <form>
+                                <% } %>        
+                    </div>
+                    <p class="status-message" style="display: none;"></p> <!-- Hidden status message -->
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p class="no-notifications">No notifications at the moment. Check back later!</p>
+    <% } %>
+        <script>
+            document.getElementById('back').addEventListener('click', ()=>{
+                window.location.href = 'helper-dashboard'
+            })
+        </script>
+
+</body>
+</html> 

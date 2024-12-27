@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KaryaSetu</title>
+  <link rel="stylesheet" href="frontstyles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="logo.png" alt="KaryaSetu Logo">
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <button class="login-btn" id="login">Login</button>
+      </ul>
+      
+    </nav>
+  </header>
+  
+
+    <section id="home" class="hero">
+      <div class="content">
+        <h1>KARYA<span>SETU</span></h1>
+        <div class="buttons">
+          <button id="getStartedBtn">Get Started</button>
+          
+        </div>
+      </div>
+    </section>
+    <section id="about" class="about">
+        <h2>About Us</h2>
+        <div class="about-content">
+          <p><strong>Mission:</strong> Simplify life by connecting you with trusted service providers.</p>
+          <p><strong>Vision:</strong> A seamless, safe, and efficient way to find reliable help.</p>
+          <p><strong>Values:</strong> Trust, efficiency, quality, and user-centricity.</p>
+          <p><strong>Why Us:</strong> Easy-to-use platform, secure, with a wide range of services.</p>
+        </div>
+        <div class="about-extra">
+        <img src="about.png" alt="Teamwork">
+        
+        <div>
+          <h3>About KaryaSetu</h3>
+          <p>
+            KaryaSetu connects you with trusted professionals for all your urban service needs, 
+            making life easier and more convenient. We are committed to ensuring quality service 
+            and a hassle-free experience.
+          </p>
+          <p><strong>Vetted Helpers:</strong> Helpers are always background checked and verified before joining.</p>
+        </div>
+        </div>
+      </section>
+
+      <section id="services" class="services">
+        <h2>Tackle Your Daily Hassles</h2>
+        <p class="services-description">We provide solutions tailored to your needs, ensuring peace of mind.</p>
+        <div class="service-cards-container">
+            <div class="service-card">
+                <h3>Hire a Helper</h3>
+                <p>
+                    Looking for a reliable helper for daily tasks? Whether it's cleaning, organizing, or running errands, we have the right people to simplify your life.
+                </p>
+            </div>
+            <div class="service-card">
+                <h3>Convenience At Your Doorstep</h3>
+                <p>
+                    Get your tasks done without leaving the comfort of your home. Our helpers come to your doorstep for everything from deliveries to repairs.
+                </p>
+            </div>
+            <div class="service-card">
+                <h3>Happiness Pledge</h3>
+                <p>
+                    We promise your satisfaction! If you're not happy with the service, we work with you to make it right, ensuring a stress-free experience every time.
+                </p>
+            </div>
+            <div class="service-card">
+                <h3>Skilled Professionals</h3>
+                <p>
+                    Need a specialist for a specific task? We connect you with skilled professionals for anything from home repairs to personal assistance, offering top-quality services.
+                </p>
+            </div>
+            <div class="service-card">
+                <h3>Affordable & Flexible Plans</h3>
+                <p>
+                    Our pricing plans are designed to fit your budget. Whether you need a one-time service or ongoing help, we offer flexibility to meet your needs.
+                </p>
+            </div>
+            <div class="service-card">
+                <h3>Eco-Friendly Services</h3>
+                <p>
+                    We believe in protecting the environment while helping you. Our helpers follow eco-friendly practices, from using sustainable products to minimizing waste.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+
+        
+    <section id="contact" class="contact-container"> 
+        <div>
+            <h1>Get In Touch</h1> 
+        <p>We'd love to hear from you! Feel free to reach out for any inquiries or support.</p>
+
+        </div>
+        
+        
+        <form class="contact-form" method="POST" action="/contact">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+          
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+          
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" required></textarea>
+          
+          <button type="submit">Submit</button>
+      </form>
+      
+               <div class="contact-info"> 
+                <h2>Contact Information</h2> 
+                <p>Email: 
+                    <a href="mailto:sadhvinipagidimarri99.com">sadhvinipagidimarri99@gmail.com</a>
+                </p> 
+                <p>Phone: +123 456 7890</p>
+                 <p>Address: Hyderabad</p>
+                 </div>
+            </section>
+    
+  </main>
+  
+  <script src="frontscript.js"></script>
+</body>
+</html>

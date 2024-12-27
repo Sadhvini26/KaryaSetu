@@ -1,0 +1,148 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Body Styling */
+body {
+  background-color: #f6f0fc; /* Lavender background */
+  color: #4b3f72; /* Deep lavender for text */
+  line-height: 1.6;
+  text-align: center;
+ 
+}
+
+/* Header Styling */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  position: sticky; /* Makes header stay at the top */
+  top: 0;
+  z-index: 1000;
+  margin-bottom: 50px;
+}
+
+header .logo img {
+  height: 50px;
+  width: 200px;
+}
+
+header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+header nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+header .login-btn {
+  padding: 10px 20px;
+  background-color: #6a5acd;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+header .login-btn:hover {
+  background-color: #a496fa;
+}
+
+/* Dashboard Heading */
+h1 {
+  color: #4b3f72;
+  font-size: 28px;
+  margin-top: 100px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Dashboard Styling */
+.dashboard {
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.dashboard-option {
+  background-color: #ffffff; /* White cards */
+  border: 2px solid #e0d8f7; /* Lavender border */
+  border-radius: 15px; /* Slightly rounder corners */
+  width: 300px; /* Increased width */
+  height: 200px; /* Increased height */
+  padding: 25px; /* More padding for content */
+  text-align: center;
+  text-decoration: none;
+  color: #4b3f72; /* Deep lavender */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  margin-top: 60px;
+  
+}
+
+.dashboard-option i {
+  font-size: 50px; /* Larger icons */
+  color: #6c63ff; /* Lavender icon */
+  margin-bottom: 15px;
+}
+
+.dashboard-option h3 {
+  font-size: 22px; /* Slightly larger title */
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.dashboard-option p {
+  font-size: 16px; /* Increased font size for description */
+  color: #6f6f6f; /* Soft gray for descriptions */
+}
+
+.dashboard-option:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+  background-color: #f3e8ff; /* Light lavender on hover */
+}
+
+/* FontAwesome Icons Styling */
+.dashboard-option i:hover {
+  color: #4b3f72; /* Deep lavender icon color on hover */
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .dashboard {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .dashboard-option {
+      width: 90%; /* Expand options for smaller screens */
+  }
+
+  header {
+      flex-direction: column;
+      text-align: center;
+  }
+
+  header nav ul {
+      flex-direction: column;
+      gap: 10px;
+  }
+}

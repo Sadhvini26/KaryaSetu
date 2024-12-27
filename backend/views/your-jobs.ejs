@@ -1,0 +1,47 @@
+
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs</title>
+    <link rel="stylesheet" href="/jobs.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+          <img src="/logo.png" alt="KaryaSetu Logo">
+          
+        </div>
+        <h3 style="color: rgb(83, 83, 83);">WELCOME <%= username.toUpperCase() %></h3>
+        <nav>
+           
+          <ul>
+    
+            <button class="login-btn" id="back">BACK</button>
+          </ul>
+        </nav>
+    </header>
+    
+    <section class="page-contain">
+        <% if (jobs.length > 0) { %>
+        <% jobs.forEach(job => { %>
+        <div class="data-card">
+          <h3><%= job.title %></h3>
+          
+          <p><%= job.description %></p>
+         
+        </div>
+        <% }) %>
+        <% } else { %>
+            <p>No jobs posted yet. Start by posting one!</p>
+        <% } %>
+    </section>
+    <script>
+        document.getElementById('back').addEventListener('click', ()=>{
+            window.location.href='/helper-dashboard'
+        })
+    </script>
+</body>
+</html>

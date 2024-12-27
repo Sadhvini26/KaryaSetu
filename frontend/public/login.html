@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login and Sign Up</title>
+  <link rel="stylesheet" href="loginstyle.css">
+  
+</head>
+<body>
+  <div class="container" id="container">
+    <!-- Sign Up Form -->
+    <div class="form-container sign-up-container">
+      <form action="/register" method="post">
+        <h1 style="margin-bottom: 8px;">Create Account</h1>
+        
+        <span style="margin-bottom: 10px;">or use your email for registration</span>
+        <input type="text" placeholder="Name" name="name"/>
+        <input type="email" placeholder="Email" name="email"/>
+        <input type="password" placeholder="Password" name="password"/>
+        <label for="role" style="margin-bottom: 5px;">Register As:</label>
+        <div class="select-wrapper">
+          <select name="role" required>
+            <option value="Helper">Helper</option>
+            <option value="User">User</option>
+          </select>
+        </div>
+        
+        <button type="submit" style="margin-top: 10px;">Sign Up</button>
+      </form>
+    </div>
+
+    <!-- Sign In Form -->
+    <div class="form-container sign-in-container">
+      <form action="/login" method="post">
+        <h1 style="margin-bottom: 8px;">Sign in</h1>
+        
+        <span style="margin-bottom: 10px;">or use your account</span>
+        <input type="email" placeholder="Email" name="email"/>
+        <input type="password" placeholder="Password" name="password"/>
+        <a href="#">Forgot your password?</a>
+        <button type="submit">Sign In</button>
+      </form>
+    </div>
+
+    <!-- Overlay Container for Form Toggle -->
+    <div class="overlay-container">
+      <div class="overlay">
+        <div class="overlay-panel overlay-left">
+          <h1>Welcome Back!</h1>
+          <p>To keep connected with us please login with your personal info</p>
+          <button class="ghost" id="signIn">Sign In</button>
+        </div>
+        <div class="overlay-panel overlay-right">
+          <h1>Hello, Friend!</h1>
+          <p>Enter your personal details and start journey with us</p>
+          <button class="ghost" id="signUp">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    // Toggle between Sign In and Sign Up forms
+    const signInButton = document.getElementById('signIn');
+    const signUpButton = document.getElementById('signUp');
+    const container = document.getElementById('container');
+
+    signInButton.addEventListener('click', () => {
+      container.classList.remove('right-panel-active');
+    });
+
+    signUpButton.addEventListener('click', () => {
+      container.classList.add('right-panel-active');
+    });
+  </script>
+</body>
+</html>

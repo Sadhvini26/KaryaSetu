@@ -1,0 +1,95 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Body Styling */
+body {
+  margin-top: 100px;
+  background-color: #f6f0fc; /* Lavender background */
+  color: #4b3f72; /* Deep lavender text */
+  line-height: 1.6;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Page Heading */
+h1 {
+  color: #4b3f72;
+  margin-bottom: 20px;
+  font-size: 28px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Form Styling */
+.responsive-form {
+  background-color: #ffffff;
+  padding: 30px;
+  border: 2px solid #e0d8f7;
+  border-radius: 15px;
+  width: 50%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.responsive-form label {
+  font-size: 16px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+  color: #4b3f72;
+}
+
+.responsive-form input,
+.responsive-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #e0d8f7;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #ffffff;
+}
+
+.responsive-form textarea {
+  height: 120px;
+  resize: none;
+}
+
+.responsive-form input:focus,
+.responsive-form textarea:focus {
+  outline: none;
+  border-color: #6c63ff;
+  background-color: #ffffff;
+}
+
+/* Button Styling */
+.responsive-form button {
+  background-color: #6c63ff;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.responsive-form button:hover {
+  background-color: #5b52d3;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .responsive-form {
+      width: 90%;
+  }
+}

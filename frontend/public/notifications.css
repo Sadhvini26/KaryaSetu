@@ -1,0 +1,78 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Body Styling */
+body {
+  background-color: #f6f0fc; /* Lavender background */
+  color: #4b3f72; /* Deep lavender text */
+  padding: 20px;
+  line-height: 1.6;
+}
+
+/* Page Heading */
+h1 {
+  color: #4b3f72;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* Notifications Container */
+.notification-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Notification Card Styling */
+.notification-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border: 2px solid #e0d8f7;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Full-width cards */
+}
+
+.notification-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #4b3f72;
+}
+
+.notification-message {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #6a5c8c;
+}
+
+.notification-time {
+  font-size: 14px;
+  color: #a095c8;
+  text-align: right;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .notification-card {
+      padding: 15px;
+  }
+  .notification-title {
+      font-size: 16px;
+  }
+  .notification-message {
+      font-size: 14px;
+  }
+  .notification-time {
+      font-size: 12px;
+  }
+}
+
+/* Header Styling */

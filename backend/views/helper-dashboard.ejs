@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/helper.css">
+    <title>Helper Dashboard</title>
+</head>
+<body>
+    <header>
+        <div class="logo">
+          <img src="/logo.png" alt="KaryaSetu Logo">
+          
+        </div>
+        <h3 style="color: rgb(83, 83, 83);">WELCOME <%= username.toUpperCase() %></h3>
+        <nav>
+           
+          <ul>
+           
+            <button class="login-btn" id="back">BACK</button>
+          </ul>
+        </nav>
+    </header>
+    <h1>Welcome to Your Dashboard!</h1>
+    <div class="dashboard">
+        <!-- Post Job Option -->
+        <a href="/post-job" class="dashboard-option">
+            <i class="fas fa-pen"></i>
+            <h3>Post Job</h3>
+            <p>Create and publish job posts quickly.</p>
+        </a>
+
+        <!-- Your Jobs Option -->
+        <a href="/your-jobs" class="dashboard-option">
+            <i class="fas fa-briefcase"></i>
+            <h3>Your Jobs</h3>
+            <p>View and manage the jobs you posted.</p>
+        </a>
+
+        <!-- Notifications Option -->
+        <a href="/notifications" class="dashboard-option">
+            <i class="fas fa-bell"></i>
+            <h3>Notifications</h3>
+            <p>Stay updated with important alerts.</p>
+        </a>
+    </div>
+
+    <script>
+        document.getElementById('back').addEventListener('click', ()=>{
+            window.location.href = '/index.html'
+        })
+    </script>
+
+    
+</body>
+</html>
