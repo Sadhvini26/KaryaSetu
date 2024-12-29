@@ -25,51 +25,7 @@ mongoose.connect('mongodb://localhost:27017/karyaSetuDB', {
     useUnifiedTopology: true,
 }).then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
-//   app.post("/register", async (req, res) => {
-//     try {
-//         const { name, email, password, role } = req.body;
-//         if (!['Helper', 'User'].includes(role)) {
-//             return res.status(400).json({ error: "Invalid role selected" });
-//         }
-//         const existingUser = await User.findOne({ email });
-//         if (existingUser) {
-//             return res.status(400).json({ error: "User already exists" }); // Error response
-//         }
-//         const hashedPassword = await bcrypt.hash(password, 10);
-//         const newUser = await User.create({
-//             name,
-//             email,
-//             password: hashedPassword,
-//             role,
-//         });
-//         res.status(200).json({ success: true, redirect: role === "Helper" ? "/helper-dashboard" : "/jobs" });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ error: "Internal Server Error" });
-//     }
-// });
 
-// app.post("/login", async (req, res) => {
-//     try {
-//         const { email, password } = req.body;
-//         const user = await User.findOne({ email });
-//         if (!user) {
-//             return res.status(400).json({ error: "Invalid email or password" });
-//         }
-//         const isMatch = await bcrypt.compare(password, user.password);
-//         if (!isMatch) {
-//             return res.status(400).json({ error: "Invalid email or password" });
-//         }
-//         const token = jwt.sign({ email, userId: user._id, role: user.role }, "shhhh", { expiresIn: '1h' });
-//         res.cookie("token", token, { httpOnly: true });
-//         res.status(200).json({ success: true, redirect: user.role === "Helper" ? "/helper-dashboard" : "/jobs" });
-//     } catch (err) {
-//         console.error("Error during login:", err);
-//         res.status(500).json({ error: "Internal Server Error" });
-//     }
-// });
-
-// Register Route
 app.post("/register", async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
@@ -155,9 +111,6 @@ app.post('/contact', (req, res) => {
     });
 });
 
-
-// Route to get user info based on token
-
 function authenticate(req, res, next) {
     const token = req.cookies.token;
     if (!token) {
@@ -188,52 +141,6 @@ app.get('/jobs', authenticate, async (req, res) => {
         res.status(500).send('Error loading jobs');
     }
 });
-
-
-// app.post('/jobs/hire/:jobId', authenticate, async (req, res) => {
-//     const { jobId } = req.params;
-//     const { location } = req.body;  // Capture the location sent from the frontend
-
-//     if (!mongoose.Types.ObjectId.isValid(jobId)) {
-//         return res.status(400).json({ message: 'Invalid job ID' });
-//     }
-
-//     if (!location) {
-//         return res.status(400).json({ message: 'Location is required' });  // Ensure location is provided
-//     }
-
-//     try {
-//         const job = await Job.findById(jobId);
-
-//         if (!job) {
-//             return res.status(404).json({ message: 'Job not found' });
-//         }
-
-//         if (job.hired) {
-//             return res.status(400).json({ message: 'This job has already been hired' });
-//         }
-
-//         job.hired = true;
-//         job.hiredBy = req.user._id;
-//         job.location = location;  // Store the location in the job object
-//         await job.save();
-
-//         // Create a notification including the location
-//         const notification = new Notification({
-//             message: `${req.user.name} has hired you for the job: ${job.title} at ${location}`,  // Include location in the message
-//             jobId: job._id,
-//             helperId: job.postedBy,
-//             isRead: false,
-//         });
-
-//         await notification.save();
-
-//         res.redirect('/jobs');
-//     } catch (err) {
-//         console.error('Error during hiring:', err);
-//         res.status(500).json({ message: 'Error hiring the job' });
-//     }
-// });
 app.post('/jobs/hire/:jobId', authenticate, async (req, res) => {
     const { jobId } = req.params;
     const { location } = req.body;  // Capture the location sent from the frontend
@@ -279,7 +186,6 @@ app.post('/jobs/hire/:jobId', authenticate, async (req, res) => {
         res.status(500).json({ success: false, message: 'Error hiring the job' });
     }
 });
-
 app.get('/helper-dashboard', authenticate, async (req, res) => {
     try {
         // Fetch notifications and jobs for the helper
@@ -297,7 +203,6 @@ app.get('/helper-dashboard', authenticate, async (req, res) => {
         res.status(500).send('Error loading dashboard');
     }
 });
-
 app.get('/your-jobs', authenticate, async (req, res) => {
     try {
         // Fetch jobs posted by the currently logged-in user (helper)
@@ -310,7 +215,6 @@ app.get('/your-jobs', authenticate, async (req, res) => {
         res.status(500).send('Error loading your jobs');
     }
 });
-
 app.post('/post-job', authenticate, async (req, res) => {
     const { title, description } = req.body;
 
@@ -328,7 +232,6 @@ app.post('/post-job', authenticate, async (req, res) => {
         res.status(500).send('Error posting job');
     }
 });
-
 app.post('/jobs/hire/:jobId', authenticate, async (req, res) => {
     const { jobId } = req.params;
 
@@ -342,15 +245,12 @@ app.post('/jobs/hire/:jobId', authenticate, async (req, res) => {
         if (!job) {
             return res.status(404).json({ message: 'Job not found' });
         }
-
         if (job.hired) {
             return res.status(400).json({ message: 'This job has already been hired' });
         }
-
         job.hired = true;
         job.hiredBy = req.user._id;
         await job.save();
-
         const notification = new Notification({
             message: `${req.user.name} has hired you for the job: ${job.title}`,
             jobId: job._id,
@@ -365,11 +265,9 @@ app.post('/jobs/hire/:jobId', authenticate, async (req, res) => {
         return res.status(500).json({ message: 'Error hiring the job' });
     }
 });
-
 app.get('/post-job',authenticate, async (req, res) => {
     res.render('post-job', {username:req.user.name});
 });
-
 app.get('/notifications', authenticate, async (req, res) => {
     try {
         const notifications = await Notification.find({ helperId: req.user._id }).populate('jobId');
@@ -380,9 +278,6 @@ app.get('/notifications', authenticate, async (req, res) => {
         res.status(500).send('Error loading notifications');
     }
 });
-
-
-
 app.get('/user-info', (req, res) => {
     const token = req.cookies.token;
 
@@ -400,8 +295,6 @@ app.get('/user-info', (req, res) => {
         res.json({ loggedIn: false });
     }
 });
-
-// Route to get the edit job form
 app.get('/jobs/edit/:jobId', authenticate, async (req, res) => {
     try {
         const job = await Job.findById(req.params.jobId);
@@ -421,8 +314,6 @@ app.get('/jobs/edit/:jobId', authenticate, async (req, res) => {
         res.status(500).send('Error loading job details');
     }
 });
-
-// Route to update the job after editing
 app.post('/jobs/edit/:jobId', authenticate, async (req, res) => {
     const { jobId } = req.params;
     const { title, description } = req.body;
@@ -451,8 +342,6 @@ app.post('/jobs/edit/:jobId', authenticate, async (req, res) => {
         res.status(500).send('Error updating job');
     }
 });
-
-
 app.post('/jobs/delete/:id', async (req, res) => {
     const jobId = req.params.id;
 
@@ -473,9 +362,6 @@ app.post('/jobs/delete/:id', async (req, res) => {
         res.status(500).send("Error deleting job");
     }
 });
-
-
-// Logout route
 app.post("/logout", (req, res) => {
     // Clear the token cookie
     res.clearCookie("token", { path: "/" }); // Clear the token cookie
@@ -483,13 +369,7 @@ app.post("/logout", (req, res) => {
     // Send a response to indicate logout
     res.json({ message: "Logged out successfully" });
 });
-
-
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/public', 'login.html')); // Update path if needed
 });
-
-
-
-
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
