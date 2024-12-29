@@ -11,7 +11,7 @@
   <div class="container" id="container">
     <!-- Sign Up Form -->
     <div class="form-container sign-up-container">
-      <form action="/register" method="post">
+      <form action="/register" method="post" id="signUpForm">
         <h1 style="margin-bottom: 8px;">Create Account</h1>
         
         <span style="margin-bottom: 10px;">or use your email for registration</span>
@@ -32,13 +32,13 @@
 
     <!-- Sign In Form -->
     <div class="form-container sign-in-container">
-      <form action="/login" method="post">
+      <form action="/login" method="post" id="signInForm">
         <h1 style="margin-bottom: 8px;">Sign in</h1>
         
         <span style="margin-bottom: 10px;">or use your account</span>
         <input type="email" placeholder="Email" name="email"/>
         <input type="password" placeholder="Password" name="password"/>
-        <a href="#">Forgot your password?</a>
+        
         <button type="submit">Sign In</button>
       </form>
     </div>
@@ -73,6 +73,96 @@
     signUpButton.addEventListener('click', () => {
       container.classList.add('right-panel-active');
     });
+    const signInForm = document.getElementById('signInForm');
+
+  signInForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevent form from submitting the default way
+
+    const formData = new FormData(signInForm);
+    const data = {
+      email: formData.get('email'),
+      password: formData.get('password'),
+    };
+
+    try {
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // Redirect user based on their role after successful login
+        window.location.href = result.redirect;
+      } else {
+        // Show error message and redirect to login page if email or password is incorrect
+        alert(result.error);
+        if (result.redirect) {
+          window.location.href = result.redirect;
+        }
+      }
+    } catch (err) {
+      console.error('Error during login:', err);
+      alert('Something went wrong, please try again later.');
+    }
+  });
+  // Form submission for Sign Up
+  const signUpForm = document.getElementById('signUpForm');
+
+  signUpForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevent form from submitting the default way
+
+    const formData = new FormData(signUpForm);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+      role: formData.get('role'),
+    };
+
+    try {
+      const response = await fetch('/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // Redirect user based on their role after successful registration
+        window.location.href = result.redirect;
+      } else {
+        // Show error message and redirect to login page if user already exists
+        alert(result.error);
+        if (result.redirect) {
+          window.location.href = result.redirect;
+        }
+      }
+    } catch (err) {
+      console.error('Error during registration:', err);
+      alert('Something went wrong, please try again later.');
+    }
+  });
+
+  // Toggle between Sign In and Sign Up forms
+
+
+  signInButton.addEventListener('click', () => {
+    container.classList.remove('right-panel-active');
+  });
+
+  signUpButton.addEventListener('click', () => {
+    container.classList.add('right-panel-active');
+  });
+
+
   </script>
 </body>
 </html>

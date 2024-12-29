@@ -173,7 +173,7 @@
            
           <ul>
            
-            <li><a href="#contact">Contact</a></li>
+            
             <button class="login-btn" id="back">BACK</button>
           </ul>
         </nav>
@@ -185,8 +185,8 @@
             <% notifications.forEach(notification => { %>
                 <li data-id="<%= notification._id %>" class="<%= notification.isRead ? 'read' : 'unread' %>">
                     <p><%= notification.message %> <span class="<%= notification.isRead ? 'read' : 'unread' %>">
-                        <p>Status: <%= notification.status %></p>
-                    <div class="notification-buttons">
+                        <!--<p>Status: <%= notification.status %></p>
+                     <div class="notification-buttons">
                         <% if (notification.status === 'Pending') { %>
                         <form method="POST" action="/notifications/<%= notification._id %>/accept">
                             <button class="accept-btn" type="submit">✔</button>
@@ -196,7 +196,7 @@
                             <form>
                                 <% } %>        
                     </div>
-                    <p class="status-message" style="display: none;"></p> <!-- Hidden status message -->
+                    <p class="status-message" style="display: none;"></p> Hidden status message -->
                 </li>
             <% }) %>
         </ul>

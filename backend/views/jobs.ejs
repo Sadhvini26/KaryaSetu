@@ -1,146 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jobs</title>
-    <link rel="stylesheet" href="/job.css">
-</head>
-<body>
-    <header>
-        <div class="logo">
-            <img src="/logo.png" alt="KaryaSetu Logo">
-        </div>
-        <h3 style="color: rgb(83, 83, 83);">WELCOME <%= USERNAME.toUpperCase() %></h3>
-        <nav>
-            <ul>
-                <button class="login-btn" id="back">BACK</button>
-            </ul>
-        </nav>
-    </header>
-
-    <div class="wrap">
-        <% jobs.forEach(job => { %>
-        <div class="box">
-            <div class="box-top">
-                
-                <div class="title-flex">
-                    <h3 class="box-title"><%= job.title %></h3>
-                    <p class="description"><%= job.description %></p>
-                </div>
-
-                <% if (!job.hired) { %>
-                    <form action="/jobs/hire/<%= job._id %>" method="POST" class="hire-form">
-                        <button type="button" class="hireNowBtn button">Hire Now</button>
-                      
-                       
-                        <div class="modal-overlay"></div>
-                        <div class="modal">
-                          <div class="modal-header">
-                            <button type="button" class="closeModalBtn">X</button>
-                          </div>
-                          <div class="modal-body">
-                            <label for="location">Enter your location:</label>
-                            <input type="text" name="location" required placeholder="Your Location">
-                            <button type="submit">Submit</button>
-                            <button type="button" class="closeModalBtn">Cancel</button>
-                          </div>
-                        </div>
-                      </form>
-                      
-                    
-                 
-
-                <% } else { %>
-                    <button type="button" class="button">Hired</button>
-                <% } %>
-            </div>
-        </div>
-        <% }) %>
-    </div>
-
-    
-    <script>
-    document.getElementById('back').addEventListener('click', () => {
-        window.location.href = '/';
-    });
-    
-    
-document.addEventListener('DOMContentLoaded', () => {
- 
-  const hireNowBtns = document.querySelectorAll('.hireNowBtn');
-  
- 
-  hireNowBtns.forEach(button => {
-    button.addEventListener('click', (event) => {
-      const form = button.closest('.hire-form'); 
-      const locationModal = form.querySelector('.modal'); 
-      const modalOverlay = form.querySelector('.modal-overlay'); 
-
-     
-      locationModal.classList.add('open');
-      modalOverlay.classList.add('open');
-    });
-  });
-
-  
-  const closeModalBtns = document.querySelectorAll('.closeModalBtn');
-  closeModalBtns.forEach(button => {
-    button.addEventListener('click', () => {
-      const form = button.closest('.hire-form'); 
-      const locationModal = form.querySelector('.modal'); 
-      const modalOverlay = form.querySelector('.modal-overlay'); 
-
-      
-      locationModal.classList.remove('open');
-      modalOverlay.classList.remove('open');
-    });
-  });
-
- 
-  const modalOverlays = document.querySelectorAll('.modal-overlay');
-  modalOverlays.forEach(overlay => {
-    overlay.addEventListener('click', () => {
-      const form = overlay.closest('.hire-form');
-      const locationModal = form.querySelector('.modal'); 
-      overlay.classList.remove('open');
-      locationModal.classList.remove('open');
-    });
-  });
-
-  // Handle form submission for each job
-  document.querySelectorAll('.hire-form').forEach(form => {
-    const locationInput = form.querySelector('[name="location"]');
-    const jobId = form.action.split('/').pop(); // Extract the job ID
-
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const location = locationInput.value;
-
-      fetch(`/jobs/hire/${jobId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ location })
-      })
-      .then(response => response.json())
-      .then(data => {
-        alert('Location submitted successfully!');
-        const locationModal = form.querySelector('.modal');
-        const modalOverlay = form.querySelector('.modal-overlay');
-        locationModal.classList.remove('open');
-        modalOverlay.classList.remove('open');
-      })
-      .catch(error => {
-        alert('Error submitting location');
-      });
-    });
-  });
-});
-
-    </script>
-</body>
-</html> -->
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -238,10 +95,19 @@ document.addEventListener('DOMContentLoaded', () => {
     background: linear-gradient(90deg, #6548e4, #b580ec);
     transform: scale(1.05);
 }
-
+.search-bar {
+            margin: 20px auto;
+            display: block;
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
+    
     <header>
         <div class="logo">
           <img src="/logo.png" alt="KaryaSetu Logo">
@@ -252,16 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
            
           <ul>
            
-           
+            
             <button class="login-btn" id="back">BACK</button>
           </ul>
         </nav>
     </header>
-    <h1 style="text-align: center;">Available Jobs</h1>
+    
+    <h1 style="text-align: center;">Available Services</h1>
+    <input type="text" id="searchBar" class="search-bar" placeholder="Search for services...">
     <section class="page-contain">
         <% if(jobs.length >0) {%>
         <% jobs.forEach(job => { %>
-        <div class="data-card">
+        <div class="data-card" data-title="<%= job.title.toLowerCase() %>">
+         
           <h3><%= job.title %></h3>
           
           <p><%= job.description %></p>
@@ -279,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <% } %>
     </section>
 
-    <!-- Modal -->
+   
     <div class="modal-overlay"></div>
     <div class="modal">
         <div class="modal-header">
@@ -326,27 +195,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Handle form submission
             submitBtn.addEventListener('click', () => {
-                const location = document.getElementById('location').value;
+    const location = document.getElementById('location').value;
 
-                if (location.trim()) {
-                    fetch(`/jobs/hire/${currentJobId}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ location })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert('Job successfully hired!');
-                        closeModal(); // Close the modal after submission
-                        location.reload(); // Refresh to update job status
-                    })
-                    .catch(error => {
-                        alert('Error hiring job');
-                    });
-                } else {
-                    alert('Please enter your location!');
-                }
-            });
+    if (location.trim()) {
+        fetch(`/jobs/hire/${currentJobId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ location })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message); // Show success message
+                closeModal(); // Close the modal
+                window.location.reload(); // Reload page to reflect changes
+            } else {
+                alert(data.message); // Show error message from backend
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            alert('An error occurred. Please try again.');
+        });
+    } else {
+        alert('Please enter your location!');
+    }
+});
+searchBar.addEventListener('input', (event) => {
+        const searchTerm = event.target.value.toLowerCase(); // Capture input value
+        const jobs = document.querySelectorAll('.data-card'); // Select all job cards
+
+        jobs.forEach(job => {
+            const jobTitle = job.getAttribute('data-title'); // Read data-title attribute
+            if (jobTitle.includes(searchTerm)) {
+                job.style.display = 'block'; // Show matching jobs
+            } else {
+                job.style.display = 'none'; // Hide non-matching jobs
+            }
+        });
+    });
         });
     </script>
 </body>

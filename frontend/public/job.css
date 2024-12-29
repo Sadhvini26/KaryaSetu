@@ -331,7 +331,7 @@ header .login-btn:hover {
   flex-direction: column;
   width: calc(25% - 16px); /* 4 cards per row (25% each, minus gap adjustment) */
   max-width: 280px; /* Control max width */
-  min-height: 300px; /* Control height */
+  min-height: 150px; /* Control height */
   background: white;
   padding: 1.5em;
   border-radius: 0.5em;

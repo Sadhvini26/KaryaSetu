@@ -3,10 +3,9 @@ const mongoose = require('mongoose');
 const NotificationSchema = new mongoose.Schema({
     message: String,
     jobId: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' },
-    helperId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Helper receiving notification
+    helperId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, 
     isRead: { type: Boolean, default: false },
-    status: { type: String, enum: ['Pending', 'Accepted', 'Rejected'], default: 'Pending' },
-    createdAt: { type: Date, default: Date.now }, // Timestamp for the notification
+    createdAt: { type: Date, default: Date.now }, 
 });
 
 module.exports = mongoose.model('Notification', NotificationSchema);

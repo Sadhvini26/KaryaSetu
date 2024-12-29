@@ -1,47 +1,114 @@
 
 
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jobs</title>
     <link rel="stylesheet" href="/jobs.css">
+    <style>
+        /* General styles for both buttons */
+        .edit-btn, .delete-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Style for Edit button */
+        .edit-btn {
+            background-color: #4CAF50;  /* Green */
+            color: white;
+            text-decoration: none; /* Remove underline */
+            text-align: center;
+            display: inline-block;  /* Make the link behave like a button */
+        }
+
+        .edit-btn:hover {
+            background-color: #45a049; /* Darker green */
+        }
+
+        /* Style for Delete button */
+        .delete-btn {
+            background-color: #f44336;  /* Red */
+            color: white;
+            text-decoration: none; /* Remove underline */
+            text-align: center;
+            display: inline-block;
+        }
+
+        .delete-btn:hover {
+            background-color: #da190b; /* Darker red */
+        }
+
+        /* Ensure the form and buttons are aligned */
+        form {
+            display: inline;  /* Keeps the form inline with the buttons */
+        }
+
+        /* Optional: Add spacing between buttons */
+        .button-container {
+            display: flex;
+            align-items: center;  /* Align buttons vertically in the middle */
+        }
+    </style>
 </head>
 <body>
     <header>
         <div class="logo">
-          <img src="/logo.png" alt="KaryaSetu Logo">
-          
+            <img src="/logo.png" alt="KaryaSetu Logo">
         </div>
         <h3 style="color: rgb(83, 83, 83);">WELCOME <%= username.toUpperCase() %></h3>
         <nav>
-           
-          <ul>
-    
-            <button class="login-btn" id="back">BACK</button>
-          </ul>
+            <ul>
+                <button class="login-btn" id="back">BACK</button>
+            </ul>
         </nav>
     </header>
-    
+
     <section class="page-contain">
         <% if (jobs.length > 0) { %>
         <% jobs.forEach(job => { %>
         <div class="data-card">
-          <h3><%= job.title %></h3>
-          
-          <p><%= job.description %></p>
-         
+            <h3><%= job.title %></h3>
+            <p><%= job.description %></p>
+            <% if(!job.hired) { %>
+              <a href="/jobs/edit/<%= job._id %>"><button type="submit" class="edit-btn">Edit</button></a>
+            <form action="/jobs/delete/<%= job._id %>" method="POST" style="display:inline;" id="delete-form-<%= job._id %>">
+                <button type="button" class="delete-btn" onclick="confirmDelete('<%= job._id %>')">Delete</button>
+            </form>
+            <% } %>
+            
         </div>
         <% }) %>
         <% } else { %>
             <p>No jobs posted yet. Start by posting one!</p>
         <% } %>
     </section>
+
     <script>
-        document.getElementById('back').addEventListener('click', ()=>{
-            window.location.href='/helper-dashboard'
-        })
+        // Handle the back button to navigate to the helper dashboard
+        document.getElementById('back').addEventListener('click', () => {
+            window.location.href = '/helper-dashboard';
+        });
+
+        // Confirm deletion before submitting the form
+        function confirmDelete(jobId) {
+            const confirmation = confirm("Do you really want to delete this job?");
+            if (confirmation) {
+                // If confirmed, submit the form for the specific job
+                document.getElementById(`delete-form-${jobId}`).submit();
+            }
+        }
+
+        // Display success alert if job is deleted
+        if (req.query.deleted) { 
+            alert("Job deleted successfully!");
+       }
     </script>
 </body>
 </html>

@@ -25,84 +25,101 @@ mongoose.connect('mongodb://localhost:27017/karyaSetuDB', {
     useUnifiedTopology: true,
 }).then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
+//   app.post("/register", async (req, res) => {
+//     try {
+//         const { name, email, password, role } = req.body;
+//         if (!['Helper', 'User'].includes(role)) {
+//             return res.status(400).json({ error: "Invalid role selected" });
+//         }
+//         const existingUser = await User.findOne({ email });
+//         if (existingUser) {
+//             return res.status(400).json({ error: "User already exists" }); // Error response
+//         }
+//         const hashedPassword = await bcrypt.hash(password, 10);
+//         const newUser = await User.create({
+//             name,
+//             email,
+//             password: hashedPassword,
+//             role,
+//         });
+//         res.status(200).json({ success: true, redirect: role === "Helper" ? "/helper-dashboard" : "/jobs" });
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ error: "Internal Server Error" });
+//     }
+// });
+
+// app.post("/login", async (req, res) => {
+//     try {
+//         const { email, password } = req.body;
+//         const user = await User.findOne({ email });
+//         if (!user) {
+//             return res.status(400).json({ error: "Invalid email or password" });
+//         }
+//         const isMatch = await bcrypt.compare(password, user.password);
+//         if (!isMatch) {
+//             return res.status(400).json({ error: "Invalid email or password" });
+//         }
+//         const token = jwt.sign({ email, userId: user._id, role: user.role }, "shhhh", { expiresIn: '1h' });
+//         res.cookie("token", token, { httpOnly: true });
+//         res.status(200).json({ success: true, redirect: user.role === "Helper" ? "/helper-dashboard" : "/jobs" });
+//     } catch (err) {
+//         console.error("Error during login:", err);
+//         res.status(500).json({ error: "Internal Server Error" });
+//     }
+// });
+
+// Register Route
 app.post("/register", async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
-
-        // Validate role
         if (!['Helper', 'User'].includes(role)) {
-            return res.status(400).send("Invalid role selected");
+            return res.status(400).json({ error: "Invalid role selected" });
         }
-
-        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).send("User already exists");
+            // Sending a custom error message with the response
+            return res.status(400).json({ error: "User already exists", redirect: "/login" });
         }
-
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create new user
         const newUser = await User.create({
             name,
             email,
             password: hashedPassword,
             role,
         });
-
-        // Generate JWT token
         const token = jwt.sign({ email, userId: newUser._id, role: newUser.role }, "shhhh", { expiresIn: '1h' });
-
-        // Set token in cookies
         res.cookie("token", token, { httpOnly: true });
-
-        // Redirect based on role
-        if (role === "Helper") {
-            res.redirect("/helper-dashboard");
-        } else {
-            res.redirect("/jobs");
-        }
+        res.status(200).json({ success: true, redirect: role === "Helper" ? "/helper-dashboard" : "/jobs" });
     } catch (err) {
         console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
+
+// Login Route
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
-
-        // Find user by email
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).send("Invalid email or password");
+            return res.status(400).json({ error: "Invalid email or password", redirect: "/login" });
         }
-
-        // Compare password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).send("Invalid email or password");
+            return res.status(400).json({ error: "Invalid email or password", redirect: "/login" });
         }
-
-        // Generate JWT token
         const token = jwt.sign({ email, userId: user._id, role: user.role }, "shhhh", { expiresIn: '1h' });
-
-        // Set token in cookies
         res.cookie("token", token, { httpOnly: true });
-        console.log(token);
-
-        // Redirect based on user role
-        if (user.role === "Helper") {
-            res.redirect("/helper-dashboard");
-        } else {
-            res.redirect("/jobs");
-        }
+        res.status(200).json({ success: true, redirect: user.role === "Helper" ? "/helper-dashboard" : "/jobs" });
     } catch (err) {
         console.error("Error during login:", err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
 
 const transporter = nodemailer.createTransport({
     service: 'gmail', // Using Gmail as the service provider
@@ -112,14 +129,13 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// POST route for handling contact form submission
+
 app.post('/contact', (req, res) => {
     const { name, email, message } = req.body;
 
-    // Email options
     const mailOptions = {
-        from: email,  // Sender's email (user's email)
-        to: 'sadhvinipagidimarri99@gmail.com',  // Your email where the form data will be sent
+        from: email,
+        to: 'sadhvinipagidimarri99@gmail.com',
         subject: 'New Contact Form Submission',
         text: `
             Name: ${name}
@@ -128,16 +144,18 @@ app.post('/contact', (req, res) => {
         `
     };
 
-    // Send the email
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error('Error details:', error);
-            return res.status(500).send('Error in sending email.', error.message);
+            // Redirect with error parameter
+            return res.redirect('/?success=false');
         }
-        res.redirect('/')
+        // Redirect with success parameter
+        res.redirect('/?success=true');
     });
-    
 });
+
+
 // Route to get user info based on token
 
 function authenticate(req, res, next) {
@@ -171,11 +189,17 @@ app.get('/jobs', authenticate, async (req, res) => {
     }
 });
 
+
 // app.post('/jobs/hire/:jobId', authenticate, async (req, res) => {
 //     const { jobId } = req.params;
+//     const { location } = req.body;  // Capture the location sent from the frontend
 
 //     if (!mongoose.Types.ObjectId.isValid(jobId)) {
 //         return res.status(400).json({ message: 'Invalid job ID' });
+//     }
+
+//     if (!location) {
+//         return res.status(400).json({ message: 'Location is required' });  // Ensure location is provided
 //     }
 
 //     try {
@@ -191,10 +215,12 @@ app.get('/jobs', authenticate, async (req, res) => {
 
 //         job.hired = true;
 //         job.hiredBy = req.user._id;
+//         job.location = location;  // Store the location in the job object
 //         await job.save();
 
+//         // Create a notification including the location
 //         const notification = new Notification({
-//             message: `${req.user.name} has hired you for the job: ${job.title}`,
+//             message: `${req.user.name} has hired you for the job: ${job.title} at ${location}`,  // Include location in the message
 //             jobId: job._id,
 //             helperId: job.postedBy,
 //             isRead: false,
@@ -208,7 +234,6 @@ app.get('/jobs', authenticate, async (req, res) => {
 //         res.status(500).json({ message: 'Error hiring the job' });
 //     }
 // });
-
 app.post('/jobs/hire/:jobId', authenticate, async (req, res) => {
     const { jobId } = req.params;
     const { location } = req.body;  // Capture the location sent from the frontend
@@ -247,10 +272,11 @@ app.post('/jobs/hire/:jobId', authenticate, async (req, res) => {
 
         await notification.save();
 
-        res.redirect('/jobs');
+        // Return JSON instead of redirect
+        res.status(200).json({ success: true, message: 'Job successfully hired!' });
     } catch (err) {
         console.error('Error during hiring:', err);
-        res.status(500).json({ message: 'Error hiring the job' });
+        res.status(500).json({ success: false, message: 'Error hiring the job' });
     }
 });
 
@@ -340,8 +366,8 @@ app.post('/jobs/hire/:jobId', authenticate, async (req, res) => {
     }
 });
 
-app.get('/post-job', (req, res) => {
-    res.render('post-job');
+app.get('/post-job',authenticate, async (req, res) => {
+    res.render('post-job', {username:req.user.name});
 });
 
 app.get('/notifications', authenticate, async (req, res) => {
@@ -355,30 +381,6 @@ app.get('/notifications', authenticate, async (req, res) => {
     }
 });
 
-app.post('/notifications/:notificationId/:action', authenticate, async (req, res) => {
-    const { notificationId, action } = req.params;
-
-    if (!['accept', 'reject'].includes(action)) {
-        return res.status(400).json({ message: 'Invalid action' });
-    }
-
-    try {
-        const notification = await Notification.findById(notificationId);
-
-        if (!notification) {
-            return res.status(404).json({ message: 'Notification not found' });
-        }
-
-        notification.status = action === 'accept' ? 'Accepted' : 'Rejected';
-        notification.isRead = true; // Mark the notification as read
-        await notification.save();
-
-        return res.json({ success: true, message: `Notification ${action}ed successfully` });
-    } catch (err) {
-        console.error('Error updating notification:', err);
-        return res.status(500).json({ message: 'Error updating notification' });
-    }
-});
 
 
 app.get('/user-info', (req, res) => {
@@ -399,16 +401,89 @@ app.get('/user-info', (req, res) => {
     }
 });
 
+// Route to get the edit job form
+app.get('/jobs/edit/:jobId', authenticate, async (req, res) => {
+    try {
+        const job = await Job.findById(req.params.jobId);
+
+        if (!job) {
+            return res.status(404).send('Job not found');
+        }
+
+        // Check if the logged-in user is the one who posted the job
+        if (job.postedBy.toString() !== req.user._id.toString()) {
+            return res.status(403).send('You are not authorized to edit this job');
+        }
+
+        res.render('edit-job', { job });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading job details');
+    }
+});
+
+// Route to update the job after editing
+app.post('/jobs/edit/:jobId', authenticate, async (req, res) => {
+    const { jobId } = req.params;
+    const { title, description } = req.body;
+
+    try {
+        const job = await Job.findById(jobId);
+
+        if (!job) {
+            return res.status(404).send('Job not found');
+        }
+
+        // Check if the logged-in user is the one who posted the job
+        if (job.postedBy.toString() !== req.user._id.toString()) {
+            return res.status(403).send('You are not authorized to edit this job');
+        }
+
+        // Update the job with the new details
+        job.title = title || job.title;
+        job.description = description || job.description;
+
+        await job.save();
+
+        res.redirect('/helper-dashboard');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error updating job');
+    }
+});
+
+
+app.post('/jobs/delete/:id', async (req, res) => {
+    const jobId = req.params.id;
+
+    try {
+        // Using async/await to delete the job
+        const deletedJob = await Job.findByIdAndDelete(jobId);
+        
+        if (!deletedJob) {
+            // If the job doesn't exist
+            return res.status(404).send("Job not found");
+        }
+
+        // Redirect with success message
+        res.redirect('/your-jobs?deleted=true');
+    } catch (err) {
+        // Handle any errors
+        console.error(err);
+        res.status(500).send("Error deleting job");
+    }
+});
 
 
 // Logout route
 app.post("/logout", (req, res) => {
     // Clear the token cookie
-    res.clearCookie("token", { path: "/" }); // This clears the 'token' cookie across the site
+    res.clearCookie("token", { path: "/" }); // Clear the token cookie
 
     // Send a response to indicate logout
     res.json({ message: "Logged out successfully" });
 });
+
 
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/public', 'login.html')); // Update path if needed
